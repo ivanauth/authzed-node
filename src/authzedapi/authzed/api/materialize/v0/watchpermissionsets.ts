@@ -12,6 +12,8 @@ import type { PartialMessage } from "@protobuf-ts/runtime";
 import { reflectionMergePartial } from "@protobuf-ts/runtime";
 import { MESSAGE_TYPE } from "@protobuf-ts/runtime";
 import { MessageType } from "@protobuf-ts/runtime";
+import { Timestamp } from "../../../../google/protobuf/timestamp.js";
+import { WatchedPermission } from "./watchpermissions.js";
 import { ZedToken } from "../../v1/core.js";
 /**
  * @generated from protobuf message authzed.api.materialize.v0.WatchPermissionSetsRequest
@@ -308,6 +310,12 @@ export interface BreakingSchemaChange {
      * @generated from protobuf field: authzed.api.v1.ZedToken change_at = 1;
      */
     changeAt?: ZedToken;
+    /**
+     * affected_permissions lists all the watched permissions that were directly affected by the breaking schema change.
+     *
+     * @generated from protobuf field: repeated authzed.api.materialize.v0.WatchedPermission affected_permissions = 2;
+     */
+    affectedPermissions: WatchedPermission[];
 }
 /**
  * @generated from protobuf message authzed.api.materialize.v0.DownloadPermissionSetsRequest
@@ -348,6 +356,21 @@ export interface DownloadPermissionSetsResponse {
      * @generated from protobuf field: repeated authzed.api.materialize.v0.File files = 1;
      */
     files: File[];
+    /**
+     * timestamp represents the time associated with the returned data revision.
+     *
+     * @generated from protobuf field: google.protobuf.Timestamp timestamp = 2;
+     */
+    timestamp?: Timestamp;
+    /**
+     * at_revision is the snapshot revision the returned files were produced at,
+     * encoded as a ZedToken. Consumers should pass this token to
+     * WatchPermissionSets as optional_starting_after to resume the stream
+     * immediately after the snapshot without leaving gaps in event history.
+     *
+     * @generated from protobuf field: authzed.api.v1.ZedToken at_revision = 3;
+     */
+    atRevision?: ZedToken;
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class WatchPermissionSetsRequest$Type extends MessageType<WatchPermissionSetsRequest> {
@@ -927,11 +950,12 @@ export const LookupPermissionSetsRequired = new LookupPermissionSetsRequired$Typ
 class BreakingSchemaChange$Type extends MessageType<BreakingSchemaChange> {
     constructor() {
         super("authzed.api.materialize.v0.BreakingSchemaChange", [
-            { no: 1, name: "change_at", kind: "message", T: () => ZedToken }
+            { no: 1, name: "change_at", kind: "message", T: () => ZedToken },
+            { no: 2, name: "affected_permissions", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => WatchedPermission }
         ]);
     }
     create(value?: PartialMessage<BreakingSchemaChange>): BreakingSchemaChange {
-        const message = {};
+        const message = { affectedPermissions: [] };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<BreakingSchemaChange>(this, message, value);
@@ -944,6 +968,9 @@ class BreakingSchemaChange$Type extends MessageType<BreakingSchemaChange> {
             switch (fieldNo) {
                 case /* authzed.api.v1.ZedToken change_at */ 1:
                     message.changeAt = ZedToken.internalBinaryRead(reader, reader.uint32(), options, message.changeAt);
+                    break;
+                case /* repeated authzed.api.materialize.v0.WatchedPermission affected_permissions */ 2:
+                    message.affectedPermissions.push(WatchedPermission.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -960,6 +987,9 @@ class BreakingSchemaChange$Type extends MessageType<BreakingSchemaChange> {
         /* authzed.api.v1.ZedToken change_at = 1; */
         if (message.changeAt)
             ZedToken.internalBinaryWrite(message.changeAt, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        /* repeated authzed.api.materialize.v0.WatchedPermission affected_permissions = 2; */
+        for (let i = 0; i < message.affectedPermissions.length; i++)
+            WatchedPermission.internalBinaryWrite(message.affectedPermissions[i], writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -1075,7 +1105,9 @@ export const File = new File$Type();
 class DownloadPermissionSetsResponse$Type extends MessageType<DownloadPermissionSetsResponse> {
     constructor() {
         super("authzed.api.materialize.v0.DownloadPermissionSetsResponse", [
-            { no: 1, name: "files", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => File }
+            { no: 1, name: "files", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => File },
+            { no: 2, name: "timestamp", kind: "message", T: () => Timestamp },
+            { no: 3, name: "at_revision", kind: "message", T: () => ZedToken }
         ]);
     }
     create(value?: PartialMessage<DownloadPermissionSetsResponse>): DownloadPermissionSetsResponse {
@@ -1093,6 +1125,12 @@ class DownloadPermissionSetsResponse$Type extends MessageType<DownloadPermission
                 case /* repeated authzed.api.materialize.v0.File files */ 1:
                     message.files.push(File.internalBinaryRead(reader, reader.uint32(), options));
                     break;
+                case /* google.protobuf.Timestamp timestamp */ 2:
+                    message.timestamp = Timestamp.internalBinaryRead(reader, reader.uint32(), options, message.timestamp);
+                    break;
+                case /* authzed.api.v1.ZedToken at_revision */ 3:
+                    message.atRevision = ZedToken.internalBinaryRead(reader, reader.uint32(), options, message.atRevision);
+                    break;
                 default:
                     let u = options.readUnknownField;
                     if (u === "throw")
@@ -1108,6 +1146,12 @@ class DownloadPermissionSetsResponse$Type extends MessageType<DownloadPermission
         /* repeated authzed.api.materialize.v0.File files = 1; */
         for (let i = 0; i < message.files.length; i++)
             File.internalBinaryWrite(message.files[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        /* google.protobuf.Timestamp timestamp = 2; */
+        if (message.timestamp)
+            Timestamp.internalBinaryWrite(message.timestamp, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        /* authzed.api.v1.ZedToken at_revision = 3; */
+        if (message.atRevision)
+            ZedToken.internalBinaryWrite(message.atRevision, writer.tag(3, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
