@@ -483,18 +483,32 @@ export interface CheckPermissionResponse {
  */
 export enum CheckPermissionResponse_Permissionship {
     /**
+     * PERMISSIONSHIP_UNSPECIFIED is the default value and should not be used or
+     * relied upon. Servers should not return this value.
+     *
      * @generated from protobuf enum value: PERMISSIONSHIP_UNSPECIFIED = 0;
      */
     UNSPECIFIED = 0,
     /**
+     * PERMISSIONSHIP_NO_PERMISSION indicates that the subject does not have the
+     * requested permission on the resource.
+     *
      * @generated from protobuf enum value: PERMISSIONSHIP_NO_PERMISSION = 1;
      */
     NO_PERMISSION = 1,
     /**
+     * PERMISSIONSHIP_HAS_PERMISSION indicates that the subject has the requested
+     * permission on the resource.
+     *
      * @generated from protobuf enum value: PERMISSIONSHIP_HAS_PERMISSION = 2;
      */
     HAS_PERMISSION = 2,
     /**
+     * PERMISSIONSHIP_CONDITIONAL_PERMISSION indicates that the subject has the
+     * requested permission on the resource, but only if a caveat condition is met.
+     * The `partial_caveat_info` field in the response should contain the missing
+     * context fields that must be provided to fully evaluate the caveat.
+     *
      * @generated from protobuf enum value: PERMISSIONSHIP_CONDITIONAL_PERMISSION = 3;
      */
     CONDITIONAL_PERMISSION = 3
@@ -707,6 +721,16 @@ export interface LookupResourcesRequest {
      * @generated from protobuf field: authzed.api.v1.Cursor optional_cursor = 7;
      */
     optionalCursor?: Cursor;
+    /**
+     *
+     * with_debug, if true, indicates that the response should return debug information
+     * if present and available. For now, ONLY enables debugging of maximum recursion depth
+     * errors, with additional context being returned in error details, but this may be
+     * extended in the future.
+     *
+     * @generated from protobuf field: bool with_debug = 8;
+     */
+    withDebug: boolean;
 }
 /**
  * LookupResourcesResponse contains a single matching resource object ID for the
@@ -801,9 +825,8 @@ export interface LookupSubjectsRequest {
      */
     optionalConcreteLimit: number;
     /**
-     * optional_cursor is currently unimplemented for LookupSubjects
-     * and will be ignored as of SpiceDB version 1.40.1. This will
-     * be implemented in a future version of SpiceDB.
+     * optional_cursor is not currently supported for LookupSubjects and this
+     * field will be ignored. Cursoring support will be added in a future version.
      *
      * @generated from protobuf field: authzed.api.v1.Cursor optional_cursor = 8;
      */
@@ -1017,14 +1040,25 @@ export interface ExportBulkRelationshipsResponse {
  */
 export enum LookupPermissionship {
     /**
+     * LOOKUP_PERMISSIONSHIP_UNSPECIFIED is the default value and should not be used or
+     * relied upon. Servers should not return this value.
+     *
      * @generated from protobuf enum value: LOOKUP_PERMISSIONSHIP_UNSPECIFIED = 0;
      */
     UNSPECIFIED = 0,
     /**
+     * LOOKUP_PERMISSIONSHIP_HAS_PERMISSION indicates that the subject has permission
+     * on the resource with no missing caveat context.
+     *
      * @generated from protobuf enum value: LOOKUP_PERMISSIONSHIP_HAS_PERMISSION = 1;
      */
     HAS_PERMISSION = 1,
     /**
+     * LOOKUP_PERMISSIONSHIP_CONDITIONAL_PERMISSION indicates that the subject has
+     * permission on the resource, but only if a caveat condition is met. The
+     * `partial_caveat_info` field in the response should contain the missing context
+     * fields that must be provided to fully evaluate the caveat.
+     *
      * @generated from protobuf enum value: LOOKUP_PERMISSIONSHIP_CONDITIONAL_PERMISSION = 2;
      */
     CONDITIONAL_PERMISSION = 2
@@ -1479,8 +1513,8 @@ export const Precondition = new Precondition$Type();
 class WriteRelationshipsRequest$Type extends MessageType<WriteRelationshipsRequest> {
     constructor() {
         super("authzed.api.v1.WriteRelationshipsRequest", [
-            { no: 1, name: "updates", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => RelationshipUpdate, options: { "buf.validate.field": { repeated: { items: { required: true } } }, "validate.rules": { repeated: { items: { message: { required: true } } } } } },
-            { no: 2, name: "optional_preconditions", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Precondition, options: { "buf.validate.field": { repeated: { items: { required: true } } }, "validate.rules": { repeated: { items: { message: { required: true } } } } } },
+            { no: 1, name: "updates", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => RelationshipUpdate, options: { "validate.rules": { repeated: { items: { message: { required: true } } } } } },
+            { no: 2, name: "optional_preconditions", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Precondition, options: { "validate.rules": { repeated: { items: { message: { required: true } } } } } },
             { no: 3, name: "optional_transaction_metadata", kind: "message", T: () => Struct, options: { "buf.validate.field": { required: false }, "validate.rules": { message: { required: false } } } }
         ]);
     }
@@ -1588,7 +1622,7 @@ class DeleteRelationshipsRequest$Type extends MessageType<DeleteRelationshipsReq
     constructor() {
         super("authzed.api.v1.DeleteRelationshipsRequest", [
             { no: 1, name: "relationship_filter", kind: "message", T: () => RelationshipFilter, options: { "buf.validate.field": { required: true }, "validate.rules": { message: { required: true } } } },
-            { no: 2, name: "optional_preconditions", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Precondition, options: { "buf.validate.field": { repeated: { items: { required: true } } }, "validate.rules": { repeated: { items: { message: { required: true } } } } } },
+            { no: 2, name: "optional_preconditions", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Precondition, options: { "validate.rules": { repeated: { items: { message: { required: true } } } } } },
             { no: 3, name: "optional_limit", kind: "scalar", T: 13 /*ScalarType.UINT32*/, options: { "buf.validate.field": { uint32: { gte: 0 } }, "validate.rules": { uint32: { gte: 0 } } } },
             { no: 4, name: "optional_allow_partial_deletions", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
             { no: 5, name: "optional_transaction_metadata", kind: "message", T: () => Struct, options: { "buf.validate.field": { required: false }, "validate.rules": { message: { required: false } } } }
@@ -1881,7 +1915,7 @@ class CheckBulkPermissionsRequest$Type extends MessageType<CheckBulkPermissionsR
     constructor() {
         super("authzed.api.v1.CheckBulkPermissionsRequest", [
             { no: 1, name: "consistency", kind: "message", T: () => Consistency },
-            { no: 2, name: "items", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => CheckBulkPermissionsRequestItem, options: { "buf.validate.field": { repeated: { items: { required: true } } }, "validate.rules": { repeated: { items: { message: { required: true } } } } } },
+            { no: 2, name: "items", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => CheckBulkPermissionsRequestItem, options: { "validate.rules": { repeated: { items: { message: { required: true } } } } } },
             { no: 3, name: "with_tracing", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
         ]);
     }
@@ -2010,7 +2044,7 @@ class CheckBulkPermissionsResponse$Type extends MessageType<CheckBulkPermissions
     constructor() {
         super("authzed.api.v1.CheckBulkPermissionsResponse", [
             { no: 1, name: "checked_at", kind: "message", T: () => ZedToken, options: { "buf.validate.field": { required: false }, "validate.rules": { message: { required: false } } } },
-            { no: 2, name: "pairs", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => CheckBulkPermissionsPair, options: { "buf.validate.field": { repeated: { items: { required: true } } }, "validate.rules": { repeated: { items: { message: { required: true } } } } } }
+            { no: 2, name: "pairs", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => CheckBulkPermissionsPair, options: { "validate.rules": { repeated: { items: { message: { required: true } } } } } }
         ]);
     }
     create(value?: PartialMessage<CheckBulkPermissionsResponse>): CheckBulkPermissionsResponse {
@@ -2312,11 +2346,12 @@ class LookupResourcesRequest$Type extends MessageType<LookupResourcesRequest> {
             { no: 4, name: "subject", kind: "message", T: () => SubjectReference, options: { "buf.validate.field": { required: true }, "validate.rules": { message: { required: true } } } },
             { no: 5, name: "context", kind: "message", T: () => Struct, options: { "buf.validate.field": { required: false }, "validate.rules": { message: { required: false } } } },
             { no: 6, name: "optional_limit", kind: "scalar", T: 13 /*ScalarType.UINT32*/, options: { "buf.validate.field": { uint32: { gte: 0 } }, "validate.rules": { uint32: { gte: 0 } } } },
-            { no: 7, name: "optional_cursor", kind: "message", T: () => Cursor }
+            { no: 7, name: "optional_cursor", kind: "message", T: () => Cursor },
+            { no: 8, name: "with_debug", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
         ]);
     }
     create(value?: PartialMessage<LookupResourcesRequest>): LookupResourcesRequest {
-        const message = { resourceObjectType: "", permission: "", optionalLimit: 0 };
+        const message = { resourceObjectType: "", permission: "", optionalLimit: 0, withDebug: false };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<LookupResourcesRequest>(this, message, value);
@@ -2347,6 +2382,9 @@ class LookupResourcesRequest$Type extends MessageType<LookupResourcesRequest> {
                     break;
                 case /* authzed.api.v1.Cursor optional_cursor */ 7:
                     message.optionalCursor = Cursor.internalBinaryRead(reader, reader.uint32(), options, message.optionalCursor);
+                    break;
+                case /* bool with_debug */ 8:
+                    message.withDebug = reader.bool();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -2381,6 +2419,9 @@ class LookupResourcesRequest$Type extends MessageType<LookupResourcesRequest> {
         /* authzed.api.v1.Cursor optional_cursor = 7; */
         if (message.optionalCursor)
             Cursor.internalBinaryWrite(message.optionalCursor, writer.tag(7, WireType.LengthDelimited).fork(), options).join();
+        /* bool with_debug = 8; */
+        if (message.withDebug !== false)
+            writer.tag(8, WireType.Varint).bool(message.withDebug);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -2730,7 +2771,7 @@ export const ResolvedSubject = new ResolvedSubject$Type();
 class ImportBulkRelationshipsRequest$Type extends MessageType<ImportBulkRelationshipsRequest> {
     constructor() {
         super("authzed.api.v1.ImportBulkRelationshipsRequest", [
-            { no: 1, name: "relationships", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Relationship, options: { "buf.validate.field": { repeated: { items: { required: true } } }, "validate.rules": { repeated: { items: { message: { required: true } } } } } }
+            { no: 1, name: "relationships", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Relationship, options: { "validate.rules": { repeated: { items: { message: { required: true } } } } } }
         ]);
     }
     create(value?: PartialMessage<ImportBulkRelationshipsRequest>): ImportBulkRelationshipsRequest {

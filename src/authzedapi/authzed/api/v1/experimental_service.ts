@@ -1121,7 +1121,7 @@ class BulkCheckPermissionRequest$Type extends MessageType<BulkCheckPermissionReq
     constructor() {
         super("authzed.api.v1.BulkCheckPermissionRequest", [
             { no: 1, name: "consistency", kind: "message", T: () => Consistency },
-            { no: 2, name: "items", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => BulkCheckPermissionRequestItem, options: { "buf.validate.field": { repeated: { items: { required: true } } }, "validate.rules": { repeated: { items: { message: { required: true } } } } } }
+            { no: 2, name: "items", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => BulkCheckPermissionRequestItem, options: { "validate.rules": { repeated: { items: { message: { required: true } } } } } }
         ]);
     }
     create(value?: PartialMessage<BulkCheckPermissionRequest>): BulkCheckPermissionRequest {
@@ -1243,7 +1243,7 @@ class BulkCheckPermissionResponse$Type extends MessageType<BulkCheckPermissionRe
     constructor() {
         super("authzed.api.v1.BulkCheckPermissionResponse", [
             { no: 1, name: "checked_at", kind: "message", T: () => ZedToken, options: { "buf.validate.field": { required: false }, "validate.rules": { message: { required: false } } } },
-            { no: 2, name: "pairs", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => BulkCheckPermissionPair, options: { "buf.validate.field": { repeated: { items: { required: true } } }, "validate.rules": { repeated: { items: { message: { required: true } } } } } }
+            { no: 2, name: "pairs", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => BulkCheckPermissionPair, options: { "validate.rules": { repeated: { items: { message: { required: true } } } } } }
         ]);
     }
     create(value?: PartialMessage<BulkCheckPermissionResponse>): BulkCheckPermissionResponse {
@@ -1417,7 +1417,7 @@ export const BulkCheckPermissionResponseItem = new BulkCheckPermissionResponseIt
 class BulkImportRelationshipsRequest$Type extends MessageType<BulkImportRelationshipsRequest> {
     constructor() {
         super("authzed.api.v1.BulkImportRelationshipsRequest", [
-            { no: 1, name: "relationships", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Relationship, options: { "buf.validate.field": { repeated: { items: { required: true } } }, "validate.rules": { repeated: { items: { message: { required: true } } } } } }
+            { no: 1, name: "relationships", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Relationship, options: { "validate.rules": { repeated: { items: { message: { required: true } } } } } }
         ]);
     }
     create(value?: PartialMessage<BulkImportRelationshipsRequest>): BulkImportRelationshipsRequest {

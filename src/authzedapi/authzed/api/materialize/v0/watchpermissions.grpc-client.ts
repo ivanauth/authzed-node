@@ -28,6 +28,7 @@ export interface IWatchPermissionsServiceClient {
      * is only recommended when performing the set intersections of WatchPermissionSets in the client side is not viable
      * or there is a strict application requirement to use consume the computed permissions.
      *
+     * @deprecated
      * @generated from protobuf rpc: WatchPermissions(authzed.api.materialize.v0.WatchPermissionsRequest) returns (stream authzed.api.materialize.v0.WatchPermissionsResponse);
      */
     watchPermissions(input: WatchPermissionsRequest, metadata?: grpc.Metadata, options?: grpc.CallOptions): grpc.ClientReadableStream<WatchPermissionsResponse>;
@@ -59,6 +60,7 @@ export class WatchPermissionsServiceClient extends grpc.Client implements IWatch
      * is only recommended when performing the set intersections of WatchPermissionSets in the client side is not viable
      * or there is a strict application requirement to use consume the computed permissions.
      *
+     * @deprecated
      * @generated from protobuf rpc: WatchPermissions(authzed.api.materialize.v0.WatchPermissionsRequest) returns (stream authzed.api.materialize.v0.WatchPermissionsResponse);
      */
     watchPermissions(input: WatchPermissionsRequest, metadata?: grpc.Metadata | grpc.CallOptions, options?: grpc.CallOptions): grpc.ClientReadableStream<WatchPermissionsResponse> {

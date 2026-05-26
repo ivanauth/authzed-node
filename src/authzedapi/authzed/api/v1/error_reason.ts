@@ -503,5 +503,21 @@ export enum ErrorReason {
      *
      * @generated from protobuf enum value: ERROR_REASON_TRANSACTION_METADATA_TOO_LARGE = 29;
      */
-    TRANSACTION_METADATA_TOO_LARGE = 29
+    TRANSACTION_METADATA_TOO_LARGE = 29,
+    /**
+     * The request failed because the datastore has not been migrated.
+     * This typically indicates that the `spicedb datastore migrate` command
+     * has not been run against the backing database.
+     *
+     * Example of an ErrorInfo:
+     *
+     *     {
+     *       "reason": "ERROR_REASON_DATASTORE_NOT_MIGRATED",
+     *       "domain": "authzed.com",
+     *       "metadata": {}
+     *     }
+     *
+     * @generated from protobuf enum value: ERROR_REASON_DATASTORE_NOT_MIGRATED = 30;
+     */
+    DATASTORE_NOT_MIGRATED = 30
 }

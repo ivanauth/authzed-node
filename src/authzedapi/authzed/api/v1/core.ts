@@ -747,7 +747,7 @@ class AlgebraicSubjectSet$Type extends MessageType<AlgebraicSubjectSet> {
     constructor() {
         super("authzed.api.v1.AlgebraicSubjectSet", [
             { no: 1, name: "operation", kind: "enum", T: () => ["authzed.api.v1.AlgebraicSubjectSet.Operation", AlgebraicSubjectSet_Operation, "OPERATION_"], options: { "buf.validate.field": { enum: { definedOnly: true, notIn: [0] } }, "validate.rules": { enum: { definedOnly: true, notIn: [0] } } } },
-            { no: 2, name: "children", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => PermissionRelationshipTree, options: { "buf.validate.field": { repeated: { items: { required: true } } }, "validate.rules": { repeated: { items: { message: { required: true } } } } } }
+            { no: 2, name: "children", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => PermissionRelationshipTree, options: { "validate.rules": { repeated: { items: { message: { required: true } } } } } }
         ]);
     }
     create(value?: PartialMessage<AlgebraicSubjectSet>): AlgebraicSubjectSet {
