@@ -105,3 +105,49 @@ const lookupResourcesRequest = v1.LookupResourcesRequest.create({
 const results = await promiseClient.lookupResources(lookupResourcesRequest);
 
 console.log(results);
+
+// Read all relationships for a resource type, optionally filtered by relation
+// and/or a specific resource ID. ReadRelationships is a server-streaming RPC;
+// the promise client buffers the stream and returns all results as an array.
+const readRelationshipsRequest = v1.ReadRelationshipsRequest.create({
+  consistency: v1.Consistency.create({
+    requirement: {
+      oneofKind: "fullyConsistent",
+      fullyConsistent: true,
+    },
+  }),
+  relationshipFilter: v1.RelationshipFilter.create({
+    resourceType: "test/document",
+    optionalResourceId: "somedocument",
+    optionalRelation: "viewer",
+  }),
+});
+
+const readRelationshipsResult = await promiseClient.readRelationships(readRelationshipsRequest);
+
+console.log(readRelationshipsResult);
+
+// Delete relationships matching a filter. Note that DeleteRelationships takes
+// a RelationshipFilter, not a Relationship — to delete a single specific
+// relationship, fill in resourceType, optionalResourceId, optionalRelation,
+// and optionalSubjectFilter so the filter matches exactly one row.
+const deleteRelationshipsRequest = v1.DeleteRelationshipsRequest.create({
+  relationshipFilter: v1.RelationshipFilter.create({
+    resourceType: "test/document",
+    optionalResourceId: "somedocument",
+    optionalRelation: "viewer",
+    optionalSubjectFilter: v1.SubjectFilter.create({
+      subjectType: "test/user",
+      optionalSubjectId: "fred",
+    }),
+  }),
+});
+
+const deleteRelationshipsResult = await new Promise((resolve, reject) => {
+  client.deleteRelationships(deleteRelationshipsRequest, function (err, response) {
+    if (err) reject(err);
+    resolve(response);
+  });
+});
+
+console.log(deleteRelationshipsResult);
