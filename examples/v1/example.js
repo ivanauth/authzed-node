@@ -15,12 +15,7 @@ const writeRequest = v1.WriteSchemaRequest.create({
 });
 
 // Write a schema.
-await new Promise((resolve, reject) => {
-  client.writeSchema(writeRequest, function (err, response) {
-    if (err) reject(err);
-    resolve(response);
-  });
-});
+await promiseClient.writeSchema(writeRequest);
 
 // Write a relationship.
 const writeRelationshipRequest = v1.WriteRelationshipsRequest.create({
@@ -44,12 +39,7 @@ const writeRelationshipRequest = v1.WriteRelationshipsRequest.create({
   ],
 });
 
-await new Promise((resolve, reject) => {
-  client.writeRelationships(writeRelationshipRequest, function (err, response) {
-    if (err) reject(err);
-    resolve(response);
-  });
-});
+await promiseClient.writeRelationships(writeRelationshipRequest);
 
 // Check a permission.
 const checkPermissionRequest = v1.CheckPermissionRequest.create({
@@ -72,12 +62,7 @@ const checkPermissionRequest = v1.CheckPermissionRequest.create({
   }),
 });
 
-const checkResult = await new Promise((resolve, reject) => {
-  client.checkPermission(checkPermissionRequest, function (err, response) {
-    if (err) reject(err);
-    resolve(response);
-  });
-});
+const checkResult = await promiseClient.checkPermission(checkPermissionRequest);
 
 console.log(
   checkResult.permissionship === v1.CheckPermissionResponse_Permissionship.HAS_PERMISSION,
@@ -143,11 +128,8 @@ const deleteRelationshipsRequest = v1.DeleteRelationshipsRequest.create({
   }),
 });
 
-const deleteRelationshipsResult = await new Promise((resolve, reject) => {
-  client.deleteRelationships(deleteRelationshipsRequest, function (err, response) {
-    if (err) reject(err);
-    resolve(response);
-  });
-});
+const deleteRelationshipsResult = await promiseClient.deleteRelationships(
+  deleteRelationshipsRequest,
+);
 
 console.log(deleteRelationshipsResult);
