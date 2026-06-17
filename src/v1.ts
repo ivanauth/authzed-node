@@ -75,6 +75,7 @@ class ZedClient implements ProxyHandler<ZedDefaultClientInterface> {
   ) {
     this.options = {
       ...options,
+      "grpc.enable_retries": 0,
       interceptors: [
         ...(options?.interceptors ?? []),
 
