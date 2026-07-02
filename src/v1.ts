@@ -98,7 +98,11 @@ class ZedClient implements ProxyHandler<ZedDefaultClientInterface> {
       this.watch = new WatchServiceClient(this.endpoint, this.creds, this.options);
     }
     if (preconnect & PreconnectServices.WATCH_PERMISSIONS_SERVICE) {
-      this.watchPermissions = new WatchPermissionsServiceClient(this.endpoint, this.creds, this.options);
+      this.watchPermissions = new WatchPermissionsServiceClient(
+        this.endpoint,
+        this.creds,
+        this.options,
+      );
     }
     if (preconnect & PreconnectServices.WATCH_PERMISSIONSETS_SERVICE) {
       this.watchPermissionSets = new WatchPermissionSetsServiceClient(
